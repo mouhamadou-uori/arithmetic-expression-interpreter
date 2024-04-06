@@ -1,3 +1,4 @@
 void Interpreter();
-void analizerAndExtractor();
-void readExpression();
+int analizerAndExtractor();
+void readCharactere();
+void cleanAfterEqual();

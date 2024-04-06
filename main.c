@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include "util.c"
 
+
 int main(int argc, char const *argv[])
 {
-    readExpression();
+    interpreter();
     return 0;
 }
