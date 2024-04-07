@@ -10,3 +10,4 @@ void recognizeNumber();
 void recognizeDigit();
 void recognizeAdditiveOperator();
 void recognizeMultiplicativeOperator();
+char recognizeParenthese();

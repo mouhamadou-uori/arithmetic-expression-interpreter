@@ -44,10 +44,27 @@ void cleanAfterEqual(){
 
 // recognize
 
-void recognizeExpression(){}
-void recognizeTerm(){}
-void recognizeFactor(){}
+void recognizeExpression(){
+    char *term, signe, expression;
+}
+void recognizeTerm(){
+    char *facteur, signe, *term;
+}
+void recognizeFactor(){
+    char *number, expression;
+    int hasParentheseOAndC;
+}
 void recognizeNumber(){}
-void recognizeDigit(){}
-void recognizeAdditiveOperator(){}
-void recognizeMultiplicativeOperator(){}
+char recognizeDigit(){
+    return (calu >= '0' && calu <= '9') ? calu : (char)0;
+}
+char recognizeAdditiveOperator(){
+    return (calu == '+' || calu == '-') ? calu : (char)0;
+}
+char recognizeMultiplicativeOperator(){
+    return (calu == '*' || calu == '/') ? calu : (char)0;
+    
+}
+char recognizeParenthese(){
+    return (calu == '(' || calu == ')') ? calu : (char)0;
+}
