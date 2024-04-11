@@ -1,13 +1,12 @@
 void Interpreter();
 int analizerAndExtractor();
 void readCharacter();
-void cleanAfterEqual();
-void recognizeExpression();
-
-void recognizeTerm();
-void recognizeFactor();
-void recognizeNumber();
-void recognizeDigit();
-void recognizeAdditiveOperator();
-void recognizeMultiplicativeOperator();
+void clearBuffer();
+int recognizeExpression();
+int recognizeTerm();
+int recognizeFactor();
+int recognizeNumber();
+char recognizeDigit();
+signed char recognizeAdditiveOperator();
+signed char recognizeMultiplicativeOperator();
 char recognizeParenthese();
