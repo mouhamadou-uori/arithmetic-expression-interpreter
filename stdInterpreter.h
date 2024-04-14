@@ -1,11 +1,9 @@
 void Interpreter();
 int analizerAndExtractor();
 void readCharacter();
-void clearBuffer();
+int clearBuffer();
 int recognizeExpression();
-int secondRecognizeExpression();
 int recognizeTerm();
-int secondRecognizeTerm();
 int recognizeFactor();
 int recognizeNumber();
 char recognizeDigit();
