@@ -12,3 +12,5 @@ char recognizeDigit();
 char recognizeAdditiveOperator();
 char recognizeMultiplicativeOperator();
 char recognizeParenthese();
+char recognizeParentheseOpen();
+char recohnozeParentheseCloase();
