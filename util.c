@@ -25,7 +25,7 @@ int analizerAndExtractor()
         return 1;
     else if (calu == '=')
     {
-        printf("La syntaxe de l'expression est erronée\n");
+        printf("La syntaxe de l'expression est erronee\n");
         clearBuffer();
         return 0;
     }
@@ -42,11 +42,12 @@ int analizerAndExtractor()
         }
         if ((errorGlobal == 1) || clearBuffer() != 0)
         {
+            printf("calu = %d\n", expressionValue);
             errorGlobal = 0;
             errorExpression = 0;
             errorTerm = 0;
             errorFactor = 0;
-            printf("La syntaxe de l'expression est erronée\n");
+            printf("La syntaxe de l'expression est erronee\n");
         }
         else
         {
@@ -67,11 +68,11 @@ void readCharacter()
 
 int clearBuffer()
 {
-    char temp = getchar();
+    char temp;
     do
     {
         temp = getchar();
-        if (temp != ' ' || temp != '\t')
+        if (temp != ' ' && temp != '\t' && temp != '\n')
         {
             return -1;
         }
