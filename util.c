@@ -23,14 +23,14 @@ int analizerAndExtractor(){ //fonction permettant dans un premier temps d'analys
         return 1;
     else if (calu == '=')
     {
-        printf("La syntaxe de l'expression est erronee\n");
+        printf("La syntaxe de l'expression est erronée\n");
         clearBuffer();
         return 0;
     }else
     {
-        int analysisStatus = 1;
+        int expressionValue = 1;
         while (calu != '='){
-            analysisStatus = secondRecognizeExpression();
+            expressionValue = secondRecognizeExpression();
             if (errorGlobal == 1)
                 break;
 
@@ -46,7 +46,7 @@ int analizerAndExtractor(){ //fonction permettant dans un premier temps d'analys
         }else
         {
             printf("la syntaxe de l'expression est correcte\n");
-            printf("sa valeur est %d\n", analysisStatus);
+            printf("sa valeur est %d\n", expressionValue);
         }
         
         
