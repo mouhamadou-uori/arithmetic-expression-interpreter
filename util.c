@@ -36,7 +36,7 @@ int analizerAndExtractor(){ //fonction permettant dans un premier temps d'analys
 
             //readCharacter(); // cette ligne va mettre un caractere encore non traite dans calu
         }
-        if ((errorGlobal == 1))
+        if (errorGlobal == 1)
         {
             errorGlobal = 0;
             errorExpression = 0;
