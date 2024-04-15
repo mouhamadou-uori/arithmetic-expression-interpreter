@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 char calu;
-int errorGlobal = 0;
+int errorGlobal = 0;       // variables pour renforcer la detection des erreurs dans les differentes fonction de non-terminaux
 int errorExpression = 0;
 int errorTerm = 0;
 int errorFactor = 0;
@@ -19,7 +19,7 @@ void interpreter()
 }
 
 int analizerAndExtractor()
-{ // fonction permettant dans un premier temps d'analyser une expression puis d'extraire la valeur celle ci si elle est correct
+{ // fonction permettant dans un premier temps d'analyser une expression puis d'extraire la valeur si celle ci est correct
     readCharacter();
     if (calu == '.')
         return 1;
@@ -31,7 +31,7 @@ int analizerAndExtractor()
     }
     else
     {
-        int expressionValue = 1;
+        double expressionValue = 1.0;
         while (calu != '=')
         {
             expressionValue = recognizeExpression();
@@ -40,9 +40,8 @@ int analizerAndExtractor()
 
             // readCharacter(); // cette ligne va mettre un caractere encore non traite dans calu
         }
-        if ((errorGlobal == 1) || clearBuffer() != 0)
+        if ((errorGlobal == 1) || clearBuffer() != 0) // clearBuffer va nous aider a nous debarasser de tout ce qui est apres le egale et en meme temp mous indique si y a quelque chose apres = pour detecter une erreur
         {
-            printf("calu = %d\n", expressionValue);
             errorGlobal = 0;
             errorExpression = 0;
             errorTerm = 0;
@@ -52,7 +51,7 @@ int analizerAndExtractor()
         else
         {
             printf("la syntaxe de l'expression est correcte\n");
-            printf("sa valeur est %d\n", expressionValue);
+            printf("sa valeur est %g\n", expressionValue);
         }
         return 0;
     }
@@ -80,11 +79,11 @@ int clearBuffer()
     return 0;
 }
 
-int recognizeExpression()
-{ // fonction permettant dans un premier temps d'analyser une expression puis d'extraire la valeur celle ci si elle est correct
-    int term;
+double recognizeExpression()
+{ // fonction permettant de reconnaitre une expression et d'extraire sa valeur
+    double term;
     char sign;
-    int expression;
+    double expression;
     if ((term = recognizeTerm()) != -1 || errorExpression != 1)
     {
         if ((sign = recognizeAdditiveOperator()) != 0)
@@ -134,11 +133,11 @@ int recognizeExpression()
     }
 }
 
-int recognizeTerm()
-{ // fonction permettant dans un premier temps d'analyser une expression puis d'extraire la valeur celle ci si elle est correct
-    int facteur;
+double recognizeTerm()
+{ // fonction permettant dans un premier temps d'analyser un term puis d'extraire la valeur si celle ci est correct
+    double facteur;
     char sign;
-    int term;
+    double term;
     if ((facteur = recognizeFactor()) != -1 || errorTerm != 1)
     {
         // readCharacter();
@@ -189,10 +188,10 @@ int recognizeTerm()
     }
 }
 
-int recognizeFactor()
-{
-    int nombre;
-    int expression;
+double recognizeFactor()
+{ // fonction permettant dans un premier temps d'analyser un facteur puis d'extraire la valeur si celle ci est correct
+    double nombre;
+    double expression;
     if ((nombre = recognizeNumber()) != -1 || errorFactor != 1)
     {
         return nombre;
@@ -219,13 +218,25 @@ int recognizeFactor()
     }
 }
 
-int recognizeNumber()
-{
+double recognizeNumber()
+{ // fonction pour reconnaitre un nombre
     char nombre[50] = "";
     int curseurNombre = 0;
     char chiffre;
-    while (((chiffre = recognizeDigit()) != 0) || (curseurNombre == 0 && (chiffre = recognizeAdditiveOperator()) != 0))
+    int hasComma = 0;
+    while (((chiffre = recognizeDigit()) != 0) || (curseurNombre != 0 && (chiffre = recognizeDot()) != 0) || (curseurNombre == 0 && (chiffre = recognizeAdditiveOperator()) != 0))
     {
+        if (chiffre == '.')
+        {
+            if (hasComma == 0)
+            {
+                hasComma = 1;
+            }else{
+                errorFactor = 1;
+                return -1;
+            }
+            
+        }
         nombre[curseurNombre] = chiffre;
         curseurNombre++;
         readCharacter();
@@ -237,13 +248,17 @@ int recognizeNumber()
     }
     else
     {
-        return atoi(nombre); // atoi convertie une chaine de cara
+        return strtod(nombre, NULL); // strtod convertie une chaine de caractere en double
     }
 }
 
 char recognizeDigit()
 {
-    return (calu >= '0' && calu <= '9') ? calu : 0;
+    return ((calu >= '0' && calu <= '9') || calu == '.') ? calu : 0;
+}
+char recognizeDot()
+{
+    return (calu == '.') ? calu : 0;
 }
 char recognizeAdditiveOperator()
 {
