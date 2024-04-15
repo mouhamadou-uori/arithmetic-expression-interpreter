@@ -1,5 +1,6 @@
 #include "stdInterpreter.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 char calu;
 int errorGlobal = 0;       // variables pour renforcer la detection des erreurs dans les differentes fonction de non-terminaux
@@ -32,6 +33,7 @@ int analizerAndExtractor()
     else
     {
         double expressionValue = 1.0;
+        int temp;
         while (calu != '=')
         {
             expressionValue = recognizeExpression();
@@ -40,7 +42,8 @@ int analizerAndExtractor()
 
             // readCharacter(); // cette ligne va mettre un caractere encore non traite dans calu
         }
-        if ((errorGlobal == 1) || clearBuffer() != 0) // clearBuffer va nous aider a nous debarasser de tout ce qui est apres le egale et en meme temp mous indique si y a quelque chose apres = pour detecter une erreur
+        temp = clearBuffer();
+        if ((errorGlobal == 1) || temp != 0) // clearBuffer va nous aider a nous debarasser de tout ce qui est apres le egale et en meme temp mous indique si y a quelque chose apres = pour detecter une erreur
         {
             errorGlobal = 0;
             errorExpression = 0;
@@ -68,15 +71,16 @@ void readCharacter()
 int clearBuffer()
 {
     char temp;
+    int retour = 0;
     do
     {
         temp = getchar();
         if (temp != ' ' && temp != '\t' && temp != '\n')
         {
-            return -1;
+            retour = -1;
         }
     } while (temp != '\n');
-    return 0;
+    return retour;
 }
 
 double recognizeExpression()
