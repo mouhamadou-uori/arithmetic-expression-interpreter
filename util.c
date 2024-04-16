@@ -3,8 +3,8 @@
 #include <stdio.h>
 
 char calu;
-int errorGlobal = 0;       // variables pour renforcer la detection des erreurs dans les differentes fonction de non-terminaux
-int errorExpression = 0;
+int errorGlobal = 0;       // variables global pour renforcer la detection des erreurs dans les differentes fonction de non-terminaux 
+int errorExpression = 0;   // etant donne qu'on utilise -1 pour detecter les erreurs or -1 peut bel et bien etre la valeur trouvee par la fonction sans erreur
 int errorTerm = 0;
 int errorFactor = 0;
 
@@ -40,10 +40,9 @@ int analizerAndExtractor()
             if (errorGlobal == 1)
                 break;
 
-            // readCharacter(); // cette ligne va mettre un caractere encore non traite dans calu
         }
         temp = clearBuffer();
-        if ((errorGlobal == 1) || temp != 0) // clearBuffer va nous aider a nous debarasser de tout ce qui est apres le egale et en meme temp mous indique si y a quelque chose apres = pour detecter une erreur
+        if ((errorGlobal == 1) || temp != 0) // temp va nous aider a nous debarasser de tout ce qui est apres le egale et en meme temp nous indique si y a quelque chose apres = pour detecter une erreur
         {
             errorGlobal = 0;
             errorExpression = 0;
@@ -60,7 +59,7 @@ int analizerAndExtractor()
     }
 }
 
-void readCharacter()
+void readCharacter() // fonction de « lecture améliorée »
 { // fonction de lecture ameliore utilisant des getchar afin d'obtenir un caractere non blanc depuis le buffer (le tampon)
     do
     {
@@ -69,14 +68,14 @@ void readCharacter()
 }
 
 int clearBuffer()
-{
+{ // cette fonction sert a vider le buffer apres detection d'erreur pour passer a la prochaine expression elle sert aussi a voir si il y a quelaue chose apres le egale de chaque expression
     char temp;
     int retour = 0;
     do
     {
         temp = getchar();
-        if (temp != ' ' && temp != '\t' && temp != '\n')
-        {
+        if (temp != ' ' && temp != '\t' && temp != '\n') // vu qu'on appele cette fonction apres avoir rencontre egale si temp est different de l'un de ces caracteres
+        {                                               // cela voudrait dire qu'il y a quelque(s) charactere(s) non blanc apres egale et donc cela invalide l'expression
             retour = -1;
         }
     } while (temp != '\n');
@@ -224,10 +223,10 @@ double recognizeFactor()
 
 double recognizeNumber()
 { // fonction pour reconnaitre un nombre
-    char nombre[50] = "";
+    char nombre[100] = ""; // variable dans laquelle on mettra les reels un a un avant de les convertir en double
     int curseurNombre = 0;
     char chiffre;
-    int hasComma = 0;
+    int hasComma = 0; // variable qui nous servira a detecter les erreurs notement avec les nombre qui ont plus d'un virgule
     while (((chiffre = recognizeDigit()) != 0) || (curseurNombre != 0 && (chiffre = recognizeDot()) != 0) || (curseurNombre == 0 && (chiffre = recognizeAdditiveOperator()) != 0))
     {
         if (chiffre == '.')
@@ -256,30 +255,36 @@ double recognizeNumber()
     }
 }
 
-char recognizeDigit()
+char recognizeDigit() // fonction per;ettant de reconnaitre les terminaux chiffres
 {
-    return ((calu >= '0' && calu <= '9') || calu == '.') ? calu : 0;
+    return ((calu >= '0' && calu <= '9')) ? calu : 0;
 }
+
 char recognizeDot()
 {
     return (calu == '.') ? calu : 0;
 }
-char recognizeAdditiveOperator()
+
+char recognizeAdditiveOperator() // fonction per;ettant de reconnaitre les terminaux 'operateur-additif'
 {
     return (calu == '+' || calu == '-') ? calu : 0;
 }
-char recognizeMultiplicativeOperator()
+
+char recognizeMultiplicativeOperator()   // fonction per;ettant de reconnaitre les terminaux 'operateur-multiplicatif'
 {
     return (calu == '*' || calu == '/') ? calu : 0;
 }
+
 char recognizeParenthese()
 {
     return (calu == '(' || calu == ')') ? calu : 0;
 }
+
 char recognizeParentheseOpen()
 {
     return (calu == '(') ? calu : 0;
 }
+
 char recognizeParentheseClose()
 {
     return (calu == ')') ? calu : 0;
